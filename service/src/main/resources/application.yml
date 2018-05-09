@@ -1,0 +1,30 @@
+info:
+  name: CLIENT
+logging:
+  level:
+    com.luwojtaszek.microservices.service: DEBUG
+server:
+  port: 8081
+management:
+  server:
+    port: 8081
+api:
+  endpoints:
+    contents:
+      get:
+        not-found-codes: CODE_1,CODE_10,CODE_20
+        min-duration: 1 # hundreds of miliseconds
+        max-duration: 5 # hundreds of miliseconds
+feign:
+  client:
+    oauth: # custom property
+      enabled: true
+  hystrix:
+    enabled: true
+hystrix:
+  request: # custom property
+    propagate:
+      enabled: true
+      headers:
+        - X-Custom-Header-1
+        - X-Custom-Header-2

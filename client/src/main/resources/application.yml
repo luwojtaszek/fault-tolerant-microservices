@@ -1,0 +1,62 @@
+info:
+  name: CLIENT
+logging:
+  level:
+    com.luwojtaszek.microservices.client: DEBUG
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        # it's required to expose hystrix.stream metric for hystrix dashboard
+        include: health,info,prometheus,metrics,hystrix.stream
+      base-path: /
+feign:
+  client:
+    config:
+      default:
+        decode404: true
+        connectTimeout: 10
+        readTimeout: 250
+        loggerLevel: BASIC
+#        retryer: com.luwojtaszek.microservices.client.config.feign.retryer.DefaultCustomFeignRetryer
+    oauth: # custom property
+      enabled: true
+  hystrix:
+    enabled: true
+hystrix:
+  request: # custom property
+    propagate:
+      enabled: true
+      headers:
+        - X-Custom-Header-1
+        - X-Custom-Header-2
+  command:
+    default:
+# Does not make sense to declare, it uses feign timeout properties anyway
+#      execution:
+#        isolation:
+#          strategy: THREAD
+#          timeoutInMilliseconds: 300
+      circuitBreaker:
+        requestVolumeThreshold: 20
+        sleepWindowInMilliseconds: 5000
+        errorThresholdPercentage: 50
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 10000
+          numBuckets: 10
+        healthSnapshot:
+          intervalInMilliseconds: 500
+  threadpool:
+    default:
+      coreSize: 10
+client:
+  service1:
+    url: http://localhost:8081/v1
+  service2:
+    url: http://localhost:8082/v1
+  service3:
+    url: http://localhost:8083/v1
