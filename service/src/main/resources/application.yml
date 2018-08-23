@@ -1,5 +1,5 @@
 info:
-  name: CLIENT
+  name: SERVICE
 logging:
   level:
     com.luwojtaszek.microservices.service: DEBUG

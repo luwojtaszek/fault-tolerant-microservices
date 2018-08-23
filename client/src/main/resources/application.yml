@@ -35,11 +35,11 @@ hystrix:
         - X-Custom-Header-2
   command:
     default:
-# Does not make sense to declare, it uses feign timeout properties anyway
-#      execution:
-#        isolation:
-#          strategy: THREAD
-#          timeoutInMilliseconds: 300
+      execution:
+        isolation:
+          strategy: THREAD
+          # this value must be higher than the highest feign client timeout (connect + read)
+          timeoutInMilliseconds: 300
       circuitBreaker:
         requestVolumeThreshold: 20
         sleepWindowInMilliseconds: 5000
@@ -52,6 +52,7 @@ hystrix:
           intervalInMilliseconds: 500
   threadpool:
     default:
+      # thread pool settings inherited by each feign client
       coreSize: 10
 client:
   service1:
